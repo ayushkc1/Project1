@@ -6,8 +6,26 @@ Please list out what you did here!
 * User Registration
 * Login
 * Homepage
-* * Issue
-* * Return
-* * Pay
-* * Renew
-* * Profile
+  * Issue
+   * Search
+   * If avalibale issue
+     * Update book (database/count/admin)
+     * Update Profile
+  * Renew
+    * Total Books (from-Profile)
+    * show dates of renewaL
+    * Renew of interested (add date)
+  * Return
+    * Total Books (From Profile)
+    * Return option (side)
+    * Update Database and admin pannel
+  * Pay
+    * Total Books (From Profile)
+    * Pay option (side)
+    * Update date in user profile
+  
+  * Profile
+    * Total Books
+    * Renewal Dates
+    * Fine
+    * Update Profile
