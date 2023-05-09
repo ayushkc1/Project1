@@ -11,6 +11,9 @@ def index(request):
 def home(request):
     return HttpResponse("Hello, world. You're at the polls index.")
 
+def issue(request):
+    return render(request, 'libraryapp/issue.html')
+
 def login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
