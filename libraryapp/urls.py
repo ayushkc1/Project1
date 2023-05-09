@@ -4,4 +4,5 @@ urlpatterns = [
     path("",views.index,name='index'),
     path('login/',views.login,name="login"),
     
+     path('issue/',views.issue,name="issue"),
     ]

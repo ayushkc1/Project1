@@ -6,11 +6,14 @@ from django.contrib.auth.models import User, auth
 
 # @login_required(login_url='/login')
 def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+    return render(request, 'libraryapp/home.html')
 
 # @login_required(login_url='/login')
 def home(request):
     return HttpResponse("Hello, world. You're at the polls index.")
+
+def issue(request):
+    return render(request, 'libraryapp/issue.html')
 
 def login(request):
     if request.method == 'POST':
