@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.contrib.auth.models import User, auth
 
-
+# @login_required(login_url='/login')
 def index(request):
     return render(request, 'libraryapp/home.html')
 
@@ -20,10 +21,10 @@ def login(request):
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)
-            return redirect('home')
+            auth.login(request, user)
+            return redirect('/')
         else:
             # Display an error message.
-            return render(request, 'login.html', {'error': 'Invalid login credentials.'})
+            return HttpResponse("Wrong")
     else:
-        return render(request, 'login.html')
+        return render(request, 'libraryapp/login.html')
