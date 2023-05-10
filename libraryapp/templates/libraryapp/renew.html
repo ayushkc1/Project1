@@ -17,14 +17,16 @@
       <tr>
         <th>Book Name</th>
         <th>Issued Date</th>
-        <th>Date Remained</th>
+        <th>Days Remained</th>
+        <th>Renew</th>
       </tr>
 
       {% for book in borrowed_books %}
       <tr>
         <td>{{ book.book.title }}</td>
-        <td>{{book.due_date}}</td>
-        <td>Mexico</td>
+        <td>{{book.date_borrowed}}</td>
+        <td>{{book.days_remaining}}</td>
+        <td><button>Renew</button></td>
       </tr>
       {% empty %}
       <li>No books borrowed.</li>
