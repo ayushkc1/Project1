@@ -84,3 +84,5 @@ def register(request):
     else:
         form = RegistrationForm()
     return render(request, 'libraryapp/register.html', {'form': form})
+
+ 
