@@ -28,8 +28,8 @@ def index(request):
     print(len(books))
     return render(request, 'libraryapp/home.html', {'books': books})
 
-@login_required
-def issue(request, book_id):
+
+def issue_book(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
     if request.method == 'POST':
         Borrow.objects.create(

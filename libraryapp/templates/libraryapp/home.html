@@ -40,7 +40,7 @@
           <h5>Book List In the library</h5>
           <ul>
               {% for book in books %}
-              <li>{{ book }}</li>
+              <li>{{ book.title }}:{{book.count }}</li>
               {% endfor %}
           </ul>
     
