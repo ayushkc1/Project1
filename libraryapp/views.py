@@ -49,10 +49,10 @@ def issue(request):
     return render(request, 'libraryapp/issue.html')
 
 
-def profile_mahima(request):
-    current_user=request.user
-    issued_books=Book.objects.filter(user=current_user)
-    return render(request, 'libraryapp/issue.html', {'issued_book': issued_books})
+# def profile_mahima(request):
+#     current_user=request.user
+#     issued_books=Book.objects.filter(user=current_user)
+#     return render(request, 'libraryapp/issue.html', {'issued_book': issued_books})
 
 
 

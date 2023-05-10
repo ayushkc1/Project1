@@ -7,7 +7,7 @@ class Book(models.Model):
     title=models.CharField(max_length=100)
     author=models.CharField(max_length=100)
     count=models.IntegerField()
-    borrower=models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True) 
+    # borrower=models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True) 
     def __str__(self):
         return self.title
    
