@@ -10,6 +10,8 @@ from django.contrib import messages
 from django.contrib.auth.models import User, auth
 from .forms import RegistrationForm
 from datetime import date, timedelta
+import random
+
 
 
 def home(request):
@@ -116,4 +118,13 @@ def profile(request):
 
 def logout(request):
     auth.logout(request)
-    return redirect('/login?next=/')
+    return redirect('/login?next=/')   
+
+def return_book(request, book_id, borrow_id):
+    book = get_object_or_404(Book, pk=book_id)
+    borrow = get_object_or_404(Borrow, pk=borrow_id, book=book, user=request.user)
+    book.count += 1
+    book.save()
+    borrow.delete()
+    messages.success(request, 'Book returned successfully')
+    return redirect('profile')

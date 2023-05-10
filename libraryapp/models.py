@@ -10,11 +10,12 @@ class Book(models.Model):
     count=models.IntegerField()
     # borrower=models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True) 
     def __str__(self):
-        return self.title
+        return self.title + "      Available:   " + str(self.count)
    
 
 
 class Borrow(models.Model):
+    borrow_id = models.IntegerField(primary_key=True)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date_borrowed = models.DateField(auto_now_add=True)
