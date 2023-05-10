@@ -12,6 +12,7 @@ from django.contrib import messages
 # def index(request):
 #     return render(request, 'libraryapp/home.html')
 from django.contrib.auth.models import User, auth
+from .forms import RegistrationForm
 
 # @login_required(login_url='/login')
 def index(request):
@@ -59,3 +60,24 @@ def login(request):
             return HttpResponse("Wrong")
     else:
         return render(request, 'libraryapp/login.html')
+    
+
+def register(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            user.refresh_from_db()  
+            # load the profile instance created by the signal
+            user.save()
+            raw_password = form.cleaned_data.get('password1')
+
+            # login user after signing up
+            user = authenticate(username=user.username, password=raw_password)
+            
+
+            # redirect user to home page
+            return redirect('login')
+    else:
+        form = RegistrationForm()
+    return render(request, 'libraryapp/register.html', {'form': form})
