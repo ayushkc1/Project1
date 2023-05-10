@@ -2,3 +2,4 @@ venv/
 ./Library_Maanagement_APP/__pycache__
 env/
 Project1/__pycache__/
+libraryapp/__pycache__/
