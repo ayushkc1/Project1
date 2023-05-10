@@ -1,28 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
     <title>issue</title>
-</head>
-<body><br>
-    <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search Book " aria-label="Search ">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-          </svg></button>
-        </form>
-           <br>
-            <form method="post">
-              {% csrf_token %}
-              
-              <input type="submit" value="Issue">
-            </form>
-        
-          
+  </head>
+  <body>
+    <br />
+    <form class="form-inline my-2 my-lg-0" method="post" >
+      {% csrf_token %}
+      <input
+        class="form-control mr-sm-2"
+        type="search"
+        placeholder="Search Book "
+        aria-label="Search "
+        id="book_name"
+        name="book_name"
+      />
+
+      <br />
+      <button type="submit" name="action" value="search">Search Book</button>
+    </form>
+    {% if book %}
+    <h2>Book Found</h2>
+    <p>Title: {{ book.title }}</p>
+    <p>Author: {{ book.author }}</p>
+
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="book_id" value="{{ book.book_id }}" />
+      <button type="submit" name="action" value="issue">Issue Book</button>
+    </form>
+<p>{{issued_book.title}}</p>
 
 
-</body>
+
+    {% endif %}
+    <br />
+  </body>
 </html>
