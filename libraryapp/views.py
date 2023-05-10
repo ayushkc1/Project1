@@ -6,6 +6,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import Book, Borrow
+from django.db.models import F
 
 # def index(request):
 #     return render(request, 'libraryapp/home.html')
@@ -32,6 +33,8 @@ def index(request):
 def issue_book(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
     if request.method == 'POST':
+        # Decrease the book count by 1
+        Book.objects.filter(pk=book_id).update(count=F('count') - 1)
         Borrow.objects.create(
             book=book,
             user=request.user,
