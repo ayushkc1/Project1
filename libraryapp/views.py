@@ -85,4 +85,10 @@ def register(request):
         form = RegistrationForm()
     return render(request, 'libraryapp/register.html', {'form': form})
 
+def profile(request):
+    borrowed_books = Borrow.objects.filter(user=request.user)
+    context = {'borrowed_books': borrowed_books}
+    return render(request, 'libraryapp/profile.html', context)
+
+
  
