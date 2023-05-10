@@ -1,0 +1,10 @@
+<h1>User Profile</h1>
+<p>Username: {{ request.user.username }}</p>
+<h2>Borrowed Books</h2>
+<ul>
+{% for book in borrowed_books %}
+    <li>{{ book.book.title }} by {{ book.book.author }}</li>
+{% empty %}
+    <li>No books borrowed.</li>
+{% endfor %}
+</ul>
