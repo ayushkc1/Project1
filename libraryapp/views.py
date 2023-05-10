@@ -50,3 +50,7 @@ def register(request):
     else:
         form = RegistrationForm()
     return render(request, 'libraryapp/register.html', {'form': form})
+
+def logout(request):
+    auth.logout(request)
+    return redirect('/login?next=/')   
