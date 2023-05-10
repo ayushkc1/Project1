@@ -44,6 +44,9 @@ def issue_book(request, book_id):
             user=request.user,
             due_date=request.POST['due_date']
         )
+        book.count -= 1
+        book.save()
+
         return HttpResponseRedirect(reverse('book_detail', args=(book.id,)))
     return render(request, 'libraryapp/issue.html', {'book': book})
 
