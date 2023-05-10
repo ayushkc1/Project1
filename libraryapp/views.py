@@ -14,13 +14,14 @@ from datetime import date, timedelta
 def home(request):
     return HttpResponse("Hello, world. You're at the polls index.")
 
+@login_required(login_url='/login')
 def index(request):
     books = Book.objects.all()
     print("Called?")
     print(len(books))
     return render(request, 'libraryapp/home.html', {'books': books})
 
-
+@login_required(login_url='/login')
 def issue(request):
     if request.method == 'POST':
         action = request.POST.get('action')
