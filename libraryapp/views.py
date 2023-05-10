@@ -9,6 +9,11 @@ from .models import Book, Borrow
 
 # def index(request):
 #     return render(request, 'libraryapp/home.html')
+from django.contrib.auth.models import User, auth
+
+# @login_required(login_url='/login')
+def index(request):
+    return render(request, 'libraryapp/home.html')
 
 # @login_required(login_url='/login')
 def home(request):
@@ -41,10 +46,10 @@ def login(request):
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)
-            return redirect('home')
+            auth.login(request, user)
+            return redirect('/')
         else:
             # Display an error message.
-            return render(request, 'login.html', {'error': 'Invalid login credentials.'})
+            return HttpResponse("Wrong")
     else:
-        return render(request, 'login.html')
+        return render(request, 'libraryapp/login.html')
