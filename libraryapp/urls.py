@@ -10,5 +10,6 @@ urlpatterns = [
      
      
      path("logout/",views.logout,name="logout"),
+     path('return/<int:book_id>/<int:borrow_id>/', views.return_book, name='return'),
 
     ]

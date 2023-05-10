@@ -10,6 +10,8 @@ from django.contrib import messages
 from django.contrib.auth.models import User, auth
 from .forms import RegistrationForm
 from datetime import date, timedelta
+import random
+
 
 def home(request):
     return HttpResponse("Hello, world. You're at the polls index.")
@@ -41,26 +43,19 @@ def issue(request):
             book = Book.objects.get(book_id=book_id)
             if book.count > 0:
                 borrow = Borrow.objects.create(
+                borrow_id=random.randint(100000, 999999),
                 book=book,
                 user=request.user,
                 due_date=date.today() + timedelta(days=7)
-            )
-            book.count -= 1
-            book.save()
-            messages.success(request, 'Book issued successfully')
-        else:
-            messages.error(request, 'Book is already issued')
+                )
+                book.count -= 1
+                book.save()
+                messages.success(request, 'Book issued successfully')
+            else:
+                messages.error(request, 'Book is already issued')
         return redirect('issue')
    
     return render(request, 'libraryapp/issue.html')
-
-
-# def profile_mahima(request):
-#     current_user=request.user
-#     issued_books=Book.objects.filter(user=current_user)
-#     return render(request, 'libraryapp/issue.html', {'issued_book': issued_books})
-
-
 
 
 def login(request):
@@ -108,3 +103,12 @@ def profile(request):
 def logout(request):
     auth.logout(request)
     return redirect('/login?next=/')   
+
+def return_book(request, book_id, borrow_id):
+    book = get_object_or_404(Book, pk=book_id)
+    borrow = get_object_or_404(Borrow, pk=borrow_id, book=book, user=request.user)
+    book.count += 1
+    book.save()
+    borrow.delete()
+    messages.success(request, 'Book returned successfully')
+    return redirect('profile')
