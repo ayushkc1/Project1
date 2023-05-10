@@ -7,9 +7,9 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import Book, Borrow
 from django.contrib import messages
-
 from django.contrib.auth.models import User, auth
 from .forms import RegistrationForm
+from datetime import date, timedelta
 
 def home(request):
     return HttpResponse("Hello, world. You're at the polls index.")
@@ -39,12 +39,17 @@ def issue(request):
             book_id = request.POST['book_id']
             book = Book.objects.get(book_id=book_id)
             if book.count > 0:
-                book.borrower = request.user
-                book.save()
-                messages.success(request, 'Book issued successfully')
-            else:
-                messages.error(request, 'Book is already issued')
-            return redirect('issue')
+                borrow = Borrow.objects.create(
+                book=book,
+                user=request.user,
+                due_date=date.today() + timedelta(days=7)
+            )
+            book.count -= 1
+            book.save()
+            messages.success(request, 'Book issued successfully')
+        else:
+            messages.error(request, 'Book is already issued')
+        return redirect('issue')
    
     return render(request, 'libraryapp/issue.html')
 
