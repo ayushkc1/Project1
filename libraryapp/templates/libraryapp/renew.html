@@ -7,10 +7,12 @@
     <title>Document</title>
   </head>
   <style>
-    table, th, td {
-        border: 1px solid black;
-        border-collapse: collapse;
-      }
+    table,
+    th,
+    td {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
   </style>
   <body>
     <table>
@@ -26,7 +28,18 @@
         <td>{{ book.book.title }}</td>
         <td>{{book.date_borrowed}}</td>
         <td>{{book.days_remaining}}</td>
-        <td><button>Renew</button></td>
+        <td>{{ book.book.book_id }}</td>
+        <td>
+          <form method="POST">
+            {% csrf_token %}
+            <input
+              type="hidden"
+              name="book_id"
+              value="{{ book.book.book_id }}"
+            />
+            <button>Renew</button>
+          </form>
+        </td>
       </tr>
       {% empty %}
       <li>No books borrowed.</li>

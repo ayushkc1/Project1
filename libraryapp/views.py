@@ -11,8 +11,10 @@ from django.contrib.auth.models import User, auth
 from .forms import RegistrationForm
 from datetime import date, timedelta
 
+
 def home(request):
     return HttpResponse("Hello, world. You're at the polls index.")
+
 
 @login_required(login_url='/login')
 def index(request):
@@ -20,6 +22,7 @@ def index(request):
     print("Called?")
     print(len(books))
     return render(request, 'libraryapp/home.html', {'books': books})
+
 
 @login_required(login_url='/login')
 def issue(request):
@@ -41,24 +44,33 @@ def issue(request):
             book = Book.objects.get(book_id=book_id)
             if book.count > 0:
                 borrow = Borrow.objects.create(
-                book=book,
-                user=request.user,
-                due_date=date.today() + timedelta(days=7)
-            )
+                    book=book,
+                    user=request.user,
+                    due_date=date.today() + timedelta(days=7)
+                )
             book.count -= 1
             book.save()
             messages.success(request, 'Book issued successfully')
         else:
             messages.error(request, 'Book is already issued')
         return redirect('issue')
-   
+
     return render(request, 'libraryapp/issue.html')
+
 
 def renew(request):
     borrowed_books = Borrow.objects.filter(user=request.user)
+    if request.method == 'POST':
+        book_id = request.POST['book_id']
+        book = Book.objects.get(book_id=book_id)
+        borrows = Borrow.objects.filter(book=book, user=request.user)
+        for borrow in borrows:
+            borrow.date_borrowed = date.today()
+            borrow.save()
+        messages.success(request, 'Book renewed successfully')
+        return redirect('renew')
     context = {'borrowed_books': borrowed_books}
     return render(request, 'libraryapp/renew.html', context)
-   
 
 
 def login(request):
@@ -74,21 +86,20 @@ def login(request):
             return HttpResponse("Wrong")
     else:
         return render(request, 'libraryapp/login.html')
-    
+
 
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            user.refresh_from_db()  
+            user.refresh_from_db()
             # load the profile instance created by the signal
             user.save()
             raw_password = form.cleaned_data.get('password1')
 
             # login user after signing up
             user = authenticate(username=user.username, password=raw_password)
-            
 
             # redirect user to home page
             return redirect('login')
@@ -96,13 +107,13 @@ def register(request):
         form = RegistrationForm()
     return render(request, 'libraryapp/register.html', {'form': form})
 
+
 def profile(request):
     borrowed_books = Borrow.objects.filter(user=request.user)
     context = {'borrowed_books': borrowed_books}
     return render(request, 'libraryapp/profile.html', context)
 
 
- 
 def logout(request):
     auth.logout(request)
-    return redirect('/login?next=/')   
+    return redirect('/login?next=/')
