@@ -5,8 +5,7 @@
 <h2>Borrowed Books</h2>
 <ul>
 {% for book in borrowed_books %}
-    <li>{{ book.book.title }} by {{ book.book.author }}</li>
-   
+    <li>{{ book.book.title }} by {{ book.book.author }}</li>   
 {% empty %}
     <li>No books borrowed.</li>
 {% endfor %}
