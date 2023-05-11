@@ -136,4 +136,4 @@ def return_book(request, book_id, borrow_id):
     book.save()
     borrow.delete()
     messages.success(request, 'Book returned successfully')
-    return redirect('profile')
+    return redirect('/')

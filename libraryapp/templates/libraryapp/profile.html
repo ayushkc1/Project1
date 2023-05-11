@@ -6,7 +6,7 @@
 <ul>
 {% for book in borrowed_books %}
     <li>{{ book.book.title }} by {{ book.book.author }}</li>
-    <a href="{% url 'return' book_id=book.book.book_id borrow_id=book.borrow_id %}">Return</a>
+   
 {% empty %}
     <li>No books borrowed.</li>
 {% endfor %}
