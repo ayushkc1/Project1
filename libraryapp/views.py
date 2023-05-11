@@ -11,6 +11,7 @@ from django.contrib.auth.models import User, auth
 from .forms import RegistrationForm
 from datetime import date, timedelta
 import random
+from django.db import connections
 
 
 def home(request):
@@ -94,12 +95,25 @@ def register(request):
     return render(request, 'libraryapp/register.html', {'form': form})
 
 def profile(request):
-    borrowed_books = Borrow.objects.filter(user=request.user)
+    with connections['default'].cursor() as cursor:
+        cursor.execute("SELECT * FROM libraryapp_borrow AS b INNER JOIN libraryapp_book AS bo ON b.book_id=bo.book_id WHERE user_id = %s", [request.user.id]
+            )
+        rows = cursor.fetchall()
+    
+    print("username ", request.user)
+    borrowed_books = []
+    for row in rows:
+        # book = Book(book_id=row[6], title=row[7], author=row[8], count=row[9])
+        book_data = dict(
+            book_id= row[0],
+            book_name= row[1]
+        )
+        borrowed_books.append(book_data)
+        
+    
     context = {'borrowed_books': borrowed_books}
     return render(request, 'libraryapp/profile.html', context)
 
-
- 
 def logout(request):
     auth.logout(request)
     return redirect('/login?next=/')   
@@ -112,3 +126,5 @@ def return_book(request, book_id, borrow_id):
     borrow.delete()
     messages.success(request, 'Book returned successfully')
     return redirect('profile')
+
+# def pay_fine(request)

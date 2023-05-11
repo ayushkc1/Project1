@@ -4,9 +4,9 @@
 <p>Username: {{ request.user.username }}</p>
 <h2>Borrowed Books</h2>
 <ul>
-{% for book in borrowed_books %}
-    <li>{{ book.book.title }} by {{ book.book.author }}</li>
-    <a href="{% url 'return' book_id=book.book.book_id borrow_id=book.borrow_id %}">Return</a>
+{% for borrow in borrowed_books %}
+    <li>{{ borrow.book_id }} by {{ borrow.book_name }}</li>
+    {% comment %} <a href="{% url 'return' book_id=book.0.book_id borrow_id=book.1 %}">Return</a> {% endcomment %}
 {% empty %}
     <li>No books borrowed.</li>
 {% endfor %}
