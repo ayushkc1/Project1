@@ -11,7 +11,7 @@ from django.contrib.auth.models import User, auth
 from .forms import RegistrationForm
 from datetime import date, timedelta
 import random
-
+from django.db import connection
 
 
 def home(request):
@@ -20,7 +20,9 @@ def home(request):
 
 @login_required(login_url='/login')
 def index(request):
-    books = Book.objects.all()
+  #  books = Book.objects.all()
+    books=Book.objects.raw('SELECT * FROM libraryapp_book')
+    print(books)
     print("Called?")
     print(len(books))
     return render(request, 'libraryapp/home.html', {'books': books})
@@ -35,7 +37,10 @@ def issue(request):
             book_name = request.POST['book_name']
             print(book_name)
             try:
-                book = Book.objects.get(title=book_name)
+                #book = Book.objects.get(title=book_name)
+                #book = Book.objects.raw('SELECT * FROM libraryapp_book WHERE title = %s LIMIT 1;', [book_name])[0]
+
+                book=Book.objects.raw('SELECT * FROM libraryapp_book WHERE title=%s',[book_name])[0]
                 print(book)
             except Book.DoesNotExist:
                 messages.error(request, 'Book not found')
@@ -43,7 +48,8 @@ def issue(request):
             return render(request, 'libraryapp/issue.html', {'book': book})
         if action == "issue":
             book_id = request.POST['book_id']
-            book = Book.objects.get(book_id=book_id)
+            #book = Book.objects.get(book_id=book_id)
+            book=Book.objects.raw('SELECT * FROM libraryapp_book WHERE book_id=%s',[book_id])[0]
             if book.count > 0:
                 borrow = Borrow.objects.create(
                     book=book,
@@ -64,8 +70,11 @@ def renew(request):
     borrowed_books = Borrow.objects.filter(user=request.user)
     if request.method == 'POST':
         book_id = request.POST['book_id']
-        book = Book.objects.get(book_id=book_id)
-        borrows = Borrow.objects.filter(book=book, user=request.user)
+       # book = Book.objects.get(book_id=book_id)
+        book=Book.objects.raw('SELECT * FROM libraryapp_book WHERE book_id=%s',[book_id])[0]
+       # borrows = Borrow.objects.filter(book=book, user=request.user)
+        borrows = Borrow.objects.raw('SELECT * FROM libraryapp_borrow WHERE book_id = %s AND user_id = %s;', [book.book_id, request.user.id])
+
         for borrow in borrows:
             borrow.date_borrowed = date.today()
             borrow.save()
