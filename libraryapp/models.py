@@ -26,5 +26,5 @@ class Borrow(models.Model):
         remaining = self.date_borrowed - today
         return 45-remaining.days
   
-    def __str__(self):
-        return self.book.title + " borrowed by " + self.user.username
+    # def __str__(self):
+    #     return self.book.title + " borrowed by " + self.user.username

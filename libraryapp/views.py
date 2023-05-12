@@ -12,7 +12,7 @@ from .forms import RegistrationForm
 from datetime import date, timedelta
 import random
 from django.db import connections
-
+from django.utils import timezone
 
 def home(request):
     return HttpResponse("Hello, world. You're at the polls index.")
@@ -83,7 +83,7 @@ def issue(request):
                 #     due_date=date.today() + timedelta(days=7),
                 # )
                 date_borrowed = date.today()
-                due_date = date.today() + timedelta(days=7)
+                due_date = date.today() + timedelta(days=45)
                 borrow_id = random.randint(100000, 999999)
                 print(borrow_id, book, request.user, date_borrowed, due_date)
                 
@@ -105,6 +105,22 @@ def issue(request):
 
 def renew(request):
     borrowed_books = Borrow.objects.filter(user=request.user)
+    with connections['default'].cursor() as cursor:
+        cursor.execute("SELECT * FROM libraryapp_borrow inner join libraryapp_book WHERE user_id = %s", [request.user.id])
+        rows = cursor.fetchall()
+    borrowed_books=[]
+    for row in rows:
+                       # print(row[0])
+                       
+                        rem = -(date.today() - row[0]).days+7
+                       
+                        b = dict(
+                            borrow_id=row[4], book_id=row[3], user_id=row[2], date_borrowed=row[1], due_date=row[0],title=row[6],days_remained=rem
+                        ) 
+                        #print(b)
+                        borrowed_books.append(b)
+   # print(rows, type(rows))
+    #print(borrowed_books, type(borrowed_books))
     context = {"borrowed_books": borrowed_books}
     return render(request, "libraryapp/renew.html", context)
 
@@ -175,7 +191,7 @@ def return_book(request, book_id, borrow_id):
     book.save()
     borrow.delete()
     messages.success(request, "Book returned successfully")
-    return redirect("/")
+    return redirect("renew")
 
 
 # def pay_fine(request)
