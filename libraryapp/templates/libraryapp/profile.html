@@ -7,7 +7,7 @@
 {% for borrow in borrowed_books %}
     <li>{{borrow.book_id.title}} by {{borrow.book_id.author}} </li>
     {% comment %} <li>{{ borrow.book_name }} by {{ borrow.book_author }}</li> {% endcomment %}
-    {% comment %} <a href="{% url 'return' book_id=borrow.book_id borrow_id=borrow.borrow_id %}">Return</a> {% endcomment %}
+    <a href="{% url 'return' book_id=borrow.book_id.book_id borrow_id=borrow.borrow_id %}">Return</a>
 {% empty %}
     <li>No books borrowed.</li>
 {% endfor %}
