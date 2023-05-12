@@ -26,6 +26,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ['url', 'username', 'email', 'is_staff']
+        
+    
 
 # ViewSets define the view behavior.
 class UserViewSet(viewsets.ModelViewSet):
@@ -36,9 +38,10 @@ class UserViewSet(viewsets.ModelViewSet):
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),        
-   # path("",include('libraryapp.urls')),
+   path("",include('libraryapp.urls')),
     path('', include(router.urls)),
  
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
