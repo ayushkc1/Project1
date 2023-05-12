@@ -58,6 +58,12 @@ def issue(request):
    
     return render(request, 'libraryapp/issue.html')
 
+def renew(request):
+    borrowed_books = Borrow.objects.filter(user=request.user)
+    context = {'borrowed_books': borrowed_books}
+    return render(request, 'libraryapp/renew.html', context)
+   
+
 
 def login(request):
     if request.method == 'POST':
