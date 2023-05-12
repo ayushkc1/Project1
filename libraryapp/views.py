@@ -68,7 +68,7 @@ def issue(request):
                     "SELECT * FROM libraryapp_book WHERE book_id = %s", [book_id]
                 )
                 row = cursor.fetchall()
-                print(type(row), row)
+                print("here-change", row)
             book = Book(
                 book_id=row[0][0], title=row[0][1], author=row[0][2], count=row[0][3]
             )
@@ -89,8 +89,8 @@ def issue(request):
                 
                 with connections["default"].cursor() as cursor:
                     cursor.execute(
-                        "INSERT INTO libraryapp_borrow (borrow_id, book_id, user_id, date_borrowed,due_date) VALUES (%s, %s, %s, %s,%s)",
-                        [borrow_id, book_id, request.user.id, date_borrowed, due_date],
+                        "INSERT INTO libraryapp_borrow (borrow_id, book_id, user_id, date_borrowed,due_date,deposit) VALUES (%s, %s, %s, %s,%s,%s)",
+                        [borrow_id, book_id, request.user.id, date_borrowed, due_date,500],
                     )
 
                 book.count -= 1
@@ -110,12 +110,12 @@ def renew(request):
         rows = cursor.fetchall()
     borrowed_books=[]
     for row in rows:
-                       # print(row[0])
+                        print("here see",row)
                        
-                        rem = -(date.today() - row[0]).days+7
+                        rem = -(date.today() - row[1]).days+7
                        
                         b = dict(
-                            borrow_id=row[4], book_id=row[3], user_id=row[2], date_borrowed=row[1], due_date=row[0],title=row[6],days_remained=rem
+                            borrow_id=row[2], book_id=row[3], user_id=row[3], date_borrowed=row[1], due_date=row[2],title=row[7],days_remained=rem
                         ) 
                         #print(b)
                         borrowed_books.append(b)
