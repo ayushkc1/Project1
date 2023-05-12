@@ -121,10 +121,16 @@ def profile(request):
     borrowed_books = []
     for row in rows:
         # book = Book(book_id=row[6], title=row[7], author=row[8], count=row[9])
-        book_data = dict(
-            book_id= row[0],
-            book_name= row[1]
-        )
+        # book_data = dict(
+        #     book_name= row[7],
+        #     book_author= row[8],
+        # )
+        book_data = {
+            'book_name':row[7],
+            'book_author': row[8],
+            'book_id':row[6],
+            'borrow_id':row[0],
+        }
         borrowed_books.append(book_data)
         
     
