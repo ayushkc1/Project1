@@ -17,9 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from libraryapp import views
+from restpractise import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),   
      
-    path("",include('libraryapp.urls'))
+    path("",include('libraryapp.urls')),
+    path("restp/",include('restpractise.urls')),
 ]
