@@ -143,12 +143,7 @@ def logout(request):
 
 def return_book(request, book_id, borrow_id):
     with connections['default'].cursor() as cursor:
-        # # Check that the current user borrowed the book
-        # cursor.execute("SELECT * FROM libraryapp_Book  WHERE book_id=%s AND borrow_id=%s AND user_id=%s",[book_id,borrow_id,request.user])
-        # row=cursor.fetchone()
-        # if not row:
-        #     messages.error(request, 'You did not borrow this book')
-        #     return redirect('profile')
+
         
         # Update book count and delete borrow record
         cursor.execute("UPDATE libraryapp_book SET count=count+1 WHERE book_id=%s",[book_id])
