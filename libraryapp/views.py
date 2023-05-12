@@ -117,7 +117,7 @@ def profile(request):
             )
         rows = cursor.fetchall()
     
-    print("username ", request.user)
+    # print("username ", request.user)
     borrowed_books = []
     for row in rows:
         # book = Book(book_id=row[6], title=row[7], author=row[8], count=row[9])
@@ -142,12 +142,19 @@ def logout(request):
     return redirect('/login?next=/')   
 
 def return_book(request, book_id, borrow_id):
-    book = get_object_or_404(Book, pk=book_id)
-    borrow = get_object_or_404(Borrow, pk=borrow_id, book=book, user=request.user)
-    book.count += 1
-    book.save()
-    borrow.delete()
-    messages.success(request, 'Book returned successfully')
+    with connections['default'].cursor() as cursor:
+        # # Check that the current user borrowed the book
+        # cursor.execute("SELECT * FROM libraryapp_Book  WHERE book_id=%s AND borrow_id=%s AND user_id=%s",[book_id,borrow_id,request.user])
+        # row=cursor.fetchone()
+        # if not row:
+        #     messages.error(request, 'You did not borrow this book')
+        #     return redirect('profile')
+        
+        # Update book count and delete borrow record
+        cursor.execute("UPDATE libraryapp_book SET count=count+1 WHERE book_id=%s",[book_id])
+        cursor.execute("DELETE FROM libraryapp_borrow WHERE borrow_id=%s",[borrow_id])
+    messages.success(request,"Book returned successfully")
     return redirect('profile')
+        
 
 # def pay_fine(request)
