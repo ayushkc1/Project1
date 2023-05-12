@@ -1,19 +1,25 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from restpractise.models import Item
-from .serializers import ItemSerializer
+from restpractise.models import Company
+from .serializers import CompanySerializer
+from rest_framework import viewsets
 
-@api_view(['GET'])
-def getData(request):
-    items=Item.objects.all()
-    serializer=ItemSerializer(items,many=True)
-    return Response(serializer.data)
+# @api_view(['GET'])
+# def getData(request):
+#     items=Item.objects.all()
+#     serializer=ItemSerializer(items,many=True)
+#     return Response(serializer.data)
 
 
-@api_view(['POST'])
-def addItem(request):
-    serializer=ItemSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
+# @api_view(['POST'])
+# def addItem(request):
+#     serializer=ItemSerializer(data=request.data)
+#     if serializer.is_valid():
+#         serializer.save()
         
-    return Response(serializer.data)
+#     return Response(serializer.data)
+
+class CompanyViewSet(viewsets.ModelViewSet):
+    queryset=Company.objects.all()
+    serializer_class= CompanySerializer
+    

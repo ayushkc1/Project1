@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from restpractise.models import Item
+from restpractise.models import Company
 
-class ItemSerializer(serializers.ModelSerializer):
+class CompanySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model=Item
+        model=Company
         fields="__all__"
         
