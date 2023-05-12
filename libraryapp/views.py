@@ -167,17 +167,23 @@ def profile(request):
             [request.user.id],
         )
         rows = cursor.fetchall()
-
-    print("username ", request.user)
+    
+    # print("username ", request.user)
     borrowed_books = []
     for row in rows:
-        # book = Book(book_id=row[6], title=row[7], author=row[8], count=row[9])
-        book_data = dict(book_id=row[0], book_name=row[1])
-        borrowed_books.append(book_data)
-
-    context = {"borrowed_books": borrowed_books}
-    return render(request, "libraryapp/profile.html", context)
-
+        book_data = Book(book_id=row[6], title=row[7], author=row[8], count=row[9])
+        # book_data = {
+        #     'book_name':row[7],
+        #     'book_author': row[8],
+        #     'book_id':row[6],
+        #     'borrow_id':row[0],
+        # }
+        borrowed=Borrow(borrow_id=row[0],date_borrowed=row[1], due_date=row[2],book_id=book_data,user_id=request.user,deposit=row[5] )
+        borrowed_books.append(borrowed)
+        
+    
+    context = {'borrowed_books': borrowed_books}
+    return render(request, 'libraryapp/profile.html', context)
 
 def logout(request):
     auth.logout(request)
@@ -185,13 +191,14 @@ def logout(request):
 
 
 def return_book(request, book_id, borrow_id):
-    book = get_object_or_404(Book, pk=book_id)
-    borrow = get_object_or_404(Borrow, pk=borrow_id, book=book, user=request.user)
-    book.count += 1
-    book.save()
-    borrow.delete()
-    messages.success(request, "Book returned successfully")
-    return redirect("renew")
+    with connections['default'].cursor() as cursor:
 
+        
+        # Update book count and delete borrow record
+        cursor.execute("UPDATE libraryapp_book SET count=count+1 WHERE book_id=%s",[book_id])
+        cursor.execute("DELETE FROM libraryapp_borrow WHERE borrow_id=%s",[borrow_id])
+    messages.success(request,"Book returned successfully")
+    return redirect('profile')
+        
 
 # def pay_fine(request)

@@ -19,12 +19,8 @@ class Borrow(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date_borrowed = models.DateField(auto_now_add=True)
-    due_date = models.DateField()   
+    due_date = models.DateField() 
+    deposit = models.IntegerField(default=5000) 
+
     
-    def days_remaining(self):
-        today = timezone.localdate()
-        remaining = self.date_borrowed - today
-        return 45-remaining.days
-  
-    # def __str__(self):
-    #     return self.book.title + " borrowed by " + self.user.username
+    
