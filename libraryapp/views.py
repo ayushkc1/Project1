@@ -14,6 +14,7 @@ import random
 from django.db import connections
 
 
+
 def home(request):
     return HttpResponse("Hello, world. You're at the polls index.")
 
