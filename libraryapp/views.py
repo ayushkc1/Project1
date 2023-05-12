@@ -120,18 +120,15 @@ def profile(request):
     # print("username ", request.user)
     borrowed_books = []
     for row in rows:
-        # book = Book(book_id=row[6], title=row[7], author=row[8], count=row[9])
-        # book_data = dict(
-        #     book_name= row[7],
-        #     book_author= row[8],
-        # )
-        book_data = {
-            'book_name':row[7],
-            'book_author': row[8],
-            'book_id':row[6],
-            'borrow_id':row[0],
-        }
-        borrowed_books.append(book_data)
+        book_data = Book(book_id=row[6], title=row[7], author=row[8], count=row[9])
+        # book_data = {
+        #     'book_name':row[7],
+        #     'book_author': row[8],
+        #     'book_id':row[6],
+        #     'borrow_id':row[0],
+        # }
+        borrowed=Borrow(borrow_id=row[0],date_borrowed=row[1], due_date=row[2],book_id=book_data,user_id=request.user,deposit=row[5] )
+        borrowed_books.append(borrowed)
         
     
     context = {'borrowed_books': borrowed_books}
