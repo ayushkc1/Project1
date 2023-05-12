@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # Create your models here.
 class Book(models.Model):
@@ -20,6 +21,12 @@ class Borrow(models.Model):
     date_borrowed = models.DateField(auto_now_add=True)
     due_date = models.DateField() 
     deposit = models.IntegerField(default=5000) 
-      
+
+    
+    def days_remaining(self):
+        today = timezone.localdate()
+        remaining = self.date_borrowed - today
+        return 45-remaining.days
+  
     def __str__(self):
         return self.book.title + " borrowed by " + self.user.username

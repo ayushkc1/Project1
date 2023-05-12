@@ -1,35 +1,39 @@
-{% extends "libraryapp/base.html" %}
-{% block main %}
-    <br />
-    <form class="form-inline my-2 my-lg-0" method="post" >
-      {% csrf_token %}
-      <input
-        class="form-control mr-sm-2"
-        type="search"
-        placeholder="Search Book "
-        aria-label="Search "
-        id="book_name"
-        name="book_name"
-      />
+{% extends "libraryapp/base.html" %} {% block main %}
+<br />
+<form class="form-inline my-2 my-lg-0" method="post">
+  {% csrf_token %}
+  <input
+    class="form-control mr-sm-2"
+    type="search"
+    placeholder="Search Book "
+    aria-label="Search "
+    id="book_name"
+    name="book_name"
+  />
 
-      <br />
-      <button type="submit" name="action" value="search">Search Book</button>
-    </form>
-    {% if book %}
-    <h2>Book Found</h2>
-    <p>Title: {{ book.title }}</p>
-    <p>Author: {{ book.author }}</p>
+  <br />
+  <button type="submit" name="action" value="search">Search Book</button>
+</form>
+{% if book %}
+<h2>Book Found</h2>
+<p>Title: {{ book.title }}</p>
+<p>Author: {{ book.author }}</p>
 
-    <form method="post">
-      {% csrf_token %}
-      <input type="hidden" name="book_id" value="{{ book.book_id }}" />
-      <button type="submit" name="action" value="issue">Issue Book</button>
-    </form>
-<p>{{issued_book.title}}</p>
+<form method="post">
+  {% csrf_token %}
+  <input type="hidden" name="book_id" value="{{ book.book_id }}" />
+  <button type="submit" name="action" value="issue">Issue Book</button>
+</form>
+
+{% endif %}
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+     {% if message.tags %} {{ message }}{% endif %}
+    {% endfor %}
+</ul>
+{% endif %}
 
 
-
-    {% endif %}
-    <br />
-
-    {% endblock main %}
+{% endblock main %}
