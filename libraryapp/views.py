@@ -17,12 +17,17 @@ from django.db import connections
 def home(request):
     return HttpResponse("Hello, world. You're at the polls index.")
 
+
 @login_required(login_url='/login')
 def index(request):
-    books = Book.objects.all()
+    # books = Book.objects.all()
+    with connections['default'].cursor() as cursor:
+        cursor.execute("SELECT * FROM libraryapp_Book")
+        books = cursor.fetchall()
     print("Called?")
     print(len(books))
     return render(request, 'libraryapp/home.html', {'books': books})
+
 
 @login_required(login_url='/login')
 def issue(request):
@@ -33,36 +38,58 @@ def issue(request):
             book_name = request.POST['book_name']
             print(book_name)
             try:
-                book = Book.objects.get(title=book_name)
-                print(book)
+                # book1 = Book.objects.get(title=book_name)
+                # print(type(book1))
+                with connections['default'].cursor() as cursor:
+                    cursor.execute(
+                        "SELECT * FROM libraryapp_Book WHERE title = %s", [book_name])
+                    books = cursor.fetchall()
+                    for row in books:
+                        print(row[0])
+                        book = Book(
+                            book_id=row[0], title=row[1], author=row[2], count=row[3])  #creating a book object
+                        print(book, type(book))
+                print(type(book))
+                
             except Book.DoesNotExist:
                 messages.error(request, 'Book not found')
                 return redirect('issue')
+            
             return render(request, 'libraryapp/issue.html', {'book': book})
+        
+        
         if action == "issue":
             book_id = request.POST['book_id']
-            book = Book.objects.get(book_id=book_id)
+           # book = Book.objects.get(book_id=book_id)
+            with connections['default'].cursor() as cursor:
+                print("user id ", request.user.id)
+                cursor.execute("SELECT * FROM libraryapp_book WHERE book_id = %s", [book_id])
+                row = cursor.fetchall()
+                print(type(row),row)
+            book=Book(book_id=row[0][0], title=row[0][1], author=row[0][2], count=row[0][3])
+                
+            
             if book.count > 0:
                 borrow = Borrow.objects.create(
-                borrow_id=random.randint(100000, 999999),
-                book=book,
-                user=request.user,
-                due_date=date.today() + timedelta(days=7)
+                    borrow_id=random.randint(100000, 999999),
+                    book=book,
+                    user=request.user,
+                    due_date=date.today() + timedelta(days=7)
                 )
                 book.count -= 1
                 book.save()
                 messages.success(request, 'Book issued successfully')
             else:
-                messages.error(request, 'Book is already issued')
+                messages.error(request, 'Book is out of stock')
         return redirect('issue')
-   
+
     return render(request, 'libraryapp/issue.html')
+
 
 def renew(request):
     borrowed_books = Borrow.objects.filter(user=request.user)
     context = {'borrowed_books': borrowed_books}
     return render(request, 'libraryapp/renew.html', context)
-   
 
 
 def login(request):
@@ -78,21 +105,20 @@ def login(request):
             return HttpResponse("Wrong")
     else:
         return render(request, 'libraryapp/login.html')
-    
+
 
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            user.refresh_from_db()  
+            user.refresh_from_db()
             # load the profile instance created by the signal
             user.save()
             raw_password = form.cleaned_data.get('password1')
 
             # login user after signing up
             user = authenticate(username=user.username, password=raw_password)
-            
 
             # redirect user to home page
             return redirect('login')
@@ -100,33 +126,36 @@ def register(request):
         form = RegistrationForm()
     return render(request, 'libraryapp/register.html', {'form': form})
 
+
 def profile(request):
     with connections['default'].cursor() as cursor:
         cursor.execute("SELECT * FROM libraryapp_borrow AS b INNER JOIN libraryapp_book AS bo ON b.book_id=bo.book_id WHERE user_id = %s", [request.user.id]
-            )
+                       )
         rows = cursor.fetchall()
-    
+
     print("username ", request.user)
     borrowed_books = []
     for row in rows:
         # book = Book(book_id=row[6], title=row[7], author=row[8], count=row[9])
         book_data = dict(
-            book_id= row[0],
-            book_name= row[1]
+            book_id=row[0],
+            book_name=row[1]
         )
         borrowed_books.append(book_data)
-        
-    
+
     context = {'borrowed_books': borrowed_books}
     return render(request, 'libraryapp/profile.html', context)
 
+
 def logout(request):
     auth.logout(request)
-    return redirect('/login?next=/')   
+    return redirect('/login?next=/')
+
 
 def return_book(request, book_id, borrow_id):
     book = get_object_or_404(Book, pk=book_id)
-    borrow = get_object_or_404(Borrow, pk=borrow_id, book=book, user=request.user)
+    borrow = get_object_or_404(
+        Borrow, pk=borrow_id, book=book, user=request.user)
     book.count += 1
     book.save()
     borrow.delete()
