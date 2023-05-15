@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'libraryapp',
     'restpractise',
-    'usermodels'
+    'usermodels',
+    'rest_framework',
 ]
 
 AUTH_USER_MODEL = 'usermodels.User'
@@ -135,15 +136,15 @@ CSRF_TRUSTED_ORIGINS = [
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
-REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ],
-    'DEFAULT_RENDERER_CLASSES':(
-        'rest_framework.renderers.JSONRenderer',
-    ),
-}
+# REST_FRAMEWORK = {
+#     # Use Django's standard `django.contrib.auth` permissions,
+#     # or allow read-only access for unauthenticated users.
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+#     ],
+#     # 'DEFAULT_RENDERER_CLASSES':(
+#     #     'rest_framework.renderers.JSONRenderer',
+#     # ),
+# }
 
 
