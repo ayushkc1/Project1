@@ -14,7 +14,14 @@ class StudentSerializer(serializers.Serializer):  #Serializer class with base cl
         fields=['id','name','roll','city'] #esle check matra garni ho
    
         
-    def create(self,validated_data):
+    def create(self,validated_data): #create method is used to create new object
         return Student.objects.create(**validated_data)
+    
+    def update(self,instance,validated_data):  #instance has old value and validated_data has new value
+        instance.name=validated_data.get('name',instance.name)
+        instance.roll=validated_data.get('roll',instance.roll)
+        instance.city=validated_data.get('city',instance.city)
+        instance.save()
+        return instance
     
   

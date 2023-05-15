@@ -21,4 +21,3 @@ from rest_framework.response import Response
 class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-    
