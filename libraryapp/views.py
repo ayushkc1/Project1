@@ -104,25 +104,9 @@ def issue(request):
 
 
 def renew(request):
-    borrowed_books = Borrow.objects.filter(user=request.user)
-    with connections['default'].cursor() as cursor:
-        cursor.execute("SELECT * FROM libraryapp_borrow inner join libraryapp_book WHERE user_id = %s", [request.user.id])
-        rows = cursor.fetchall()
-    borrowed_books=[]
-    for row in rows:
-                        print("here see",row)
-                       
-                        rem = -(date.today() - row[1]).days+7
-                       
-                        b = dict(
-                            borrow_id=row[2], book_id=row[3], user_id=row[3], date_borrowed=row[1], due_date=row[2],title=row[7],days_remained=rem
-                        ) 
-                        #print(b)
-                        borrowed_books.append(b)
-   # print(rows, type(rows))
-    #print(borrowed_books, type(borrowed_books))
-    context = {"borrowed_books": borrowed_books}
-    return render(request, "libraryapp/renew.html", context)
+    borrowed_books = Borrow.objects.filter(user=request.user.id)
+    context = {'borrowed_books': borrowed_books}
+    return render(request, 'libraryapp/renew.html', context)
 
 
 def login(request):
@@ -191,14 +175,13 @@ def logout(request):
 
 
 def return_book(request, book_id, borrow_id):
-    with connections['default'].cursor() as cursor:
-
-        
-        # Update book count and delete borrow record
-        cursor.execute("UPDATE libraryapp_book SET count=count+1 WHERE book_id=%s",[book_id])
-        cursor.execute("DELETE FROM libraryapp_borrow WHERE borrow_id=%s",[borrow_id])
-    messages.success(request,"Book returned successfully")
-    return redirect('profile')
-        
+    book = get_object_or_404(Book, pk=book_id)
+    borrow = get_object_or_404(
+        Borrow, pk=borrow_id, book=book, user=request.user)
+    book.count += 1
+    book.save()
+    borrow.delete()
+    messages.success(request, 'Book returned successfully')
+    return redirect('renew')
 
 # def pay_fine(request)
