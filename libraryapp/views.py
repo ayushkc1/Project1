@@ -94,7 +94,7 @@ def issue(request):
                     )
 
                 book.count -= 1
-                book.save()
+                # book.save()
                 messages.success(request, "Book issued successfully")
             else:
                 messages.error(request, "Book is out of stock")
@@ -115,9 +115,9 @@ def renew(request):
                         rem = -(date.today() - row[1]).days+7
                        
                         b = dict(
-                            borrow_id=row[2], book_id=row[3], user_id=row[3], date_borrowed=row[1], due_date=row[2],title=row[7],days_remained=rem
+                            borrow_id=row[0], book_id=row[3], user_id=row[4], date_borrowed=row[1], due_date=row[2],title=row[7],days_remained=rem
                         ) 
-                        #print(b)
+                       
                         borrowed_books.append(b)
    # print(rows, type(rows))
     #print(borrowed_books, type(borrowed_books))
@@ -198,7 +198,7 @@ def return_book(request, book_id, borrow_id):
         cursor.execute("UPDATE libraryapp_book SET count=count+1 WHERE book_id=%s",[book_id])
         cursor.execute("DELETE FROM libraryapp_borrow WHERE borrow_id=%s",[borrow_id])
     messages.success(request,"Book returned successfully")
-    return redirect('profile')
+    return redirect('renew')
         
 
 # def pay_fine(request)

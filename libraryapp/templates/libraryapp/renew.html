@@ -22,6 +22,7 @@
         <th>Issued Date</th>
         <th>Days Remained</th>
         <th>Renew</th>
+        <th>Renew</th>
         
       </tr>
 
@@ -43,6 +44,7 @@
             <button type="submit">Renew</button>
           </form>
         </td>
+        <td> <a href="{% url 'return' book_id=book.book_id borrow_id=book.borrow_id %}">Return</a></li></td>
        
       </tr>
       {% empty %}
