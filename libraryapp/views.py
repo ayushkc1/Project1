@@ -88,7 +88,7 @@ def issue(request):
 
 
 def renew(request):
-    borrowed_books = Borrow.objects.filter(user=request.user)
+    borrowed_books = Borrow.objects.filter(user=request.user.id)
     context = {'borrowed_books': borrowed_books}
     return render(request, 'libraryapp/renew.html', context)
 
@@ -161,6 +161,6 @@ def return_book(request, book_id, borrow_id):
     book.save()
     borrow.delete()
     messages.success(request, 'Book returned successfully')
-    return redirect('profile')
+    return redirect('renew')
 
 # def pay_fine(request)
