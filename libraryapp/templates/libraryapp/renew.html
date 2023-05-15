@@ -22,15 +22,15 @@
         <th>Issued Date</th>
         <th>Days Remained</th>
         <th>Renew</th>
-        <th>Return</th>
+        
       </tr>
 
       {% for book in borrowed_books %}
       <tr>
-        <td>{{ book.book.book_id }}</td>
-        <td>{{ book.book.title }}</td>
+        <td>{{ book.book_id }}</td>
+        <td>{{ book.title }}</td>
         <td>{{book.date_borrowed}}</td>
-        <td>{{book.days_remaining}}</td>
+        <td>{{book.days_remained}}</td>
       
         <td>
           <form method="POST">
@@ -43,7 +43,7 @@
             <button type="submit">Renew</button>
           </form>
         </td>
-        <td> <a href="{% url 'return' book_id=book.book.book_id borrow_id=book.borrow_id %}">Return</a></td>
+       
       </tr>
       {% empty %}
       <li>No books borrowed.</li>
