@@ -1,10 +1,17 @@
-from . import views
-from django.urls import path
-urlpatterns = [
-    path("", views.index, name='index'),
-    path( "student/", views.student_list, name="list"),
-    path("student/<int:pk>", views.student_details, name="student"),
-    path("create/", views.student_create, name="create")
 
+from . import views
+from django.urls import path,include
+from rest_framework import routers
+
+router=routers.DefaultRouter()
+router.register(r'students',views.StudentViewSet,basename='student')
+
+
+
+urlpatterns = [
+   
+    path('', include(router.urls)),
+  
+   
 
 ]
