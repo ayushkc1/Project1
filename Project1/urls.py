@@ -24,4 +24,5 @@ urlpatterns = [
      
     path("",include('libraryapp.urls')),
     path("restp/",include('restpractise.urls')),
+    path("users/",include('usermodels.urls')),
 ]
