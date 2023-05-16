@@ -4,16 +4,18 @@ from rest_framework import routers
 from rest_framework.urlpatterns import format_suffix_patterns
 
 # router=routers.DefaultRouter()
-# router.register(r'snippets',views.snippet_list,basename='snippet')
+# router.register(r'snippets',views.SnippetList.as_view(),basename='snippet')
 
 
 
 urlpatterns = [
    
-   # path('', include(router.urls)),
+#    path('', include(router.urls)),
     
-    path('snippets/',views.snippet_list),
-   path('snippets/<int:pk>/',views.snippet_detail),
+    
+   
+   path('snippets/',views.SnippetList.as_view()),
+   path('snippets/<int:pk>/',views.SnippetDetail.as_view()),
   
    
 
