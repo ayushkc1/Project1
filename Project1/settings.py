@@ -136,6 +136,14 @@ CSRF_TRUSTED_ORIGINS = [
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
+LOGIN_URL = '/users/login/'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.AllowAllUsersModelBackend',
+    # or 'django.contrib.auth.backends.AllowAllUsersRemoteUserBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 # REST_FRAMEWORK = {
 #     # Use Django's standard `django.contrib.auth` permissions,
 #     # or allow read-only access for unauthenticated users.
@@ -146,5 +154,6 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 #     #     'rest_framework.renderers.JSONRenderer',
 #     # ),
 # }
+
 
 
