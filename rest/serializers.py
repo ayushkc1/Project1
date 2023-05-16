@@ -23,5 +23,15 @@ class StudentSerializer(serializers.Serializer):  #Serializer class with base cl
         instance.city=validated_data.get('city',instance.city)
         instance.save()
         return instance
-    
-  
+
+
+#  from rest.models import Student
+#  from rest_framework.renderers import JSONRenderer
+#  from rest.serializers import StudentSerializer
+#  from rest_framework.parsers import JSONParser
+#  snippet=Student(name="shellmahi",roll=3,city="Butwal")
+#  snippet.save()
+# serializer = SnippetSerializer(snippet)
+# serializer.data
+# content = JSONRenderer().render(serializer.data)
+# content

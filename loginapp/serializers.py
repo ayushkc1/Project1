@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
-
+    role = serializers.CharField(max_length=20)
     class Meta:
         model = UserProfile
-        fields = ['user', 'role']
+        fields = ['user','role']

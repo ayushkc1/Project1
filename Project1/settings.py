@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest',
     'rest_framework.authtoken',
-    'loginapp'
+    'loginapp',
+    'snippet',
 ]
 
 MIDDLEWARE = [
@@ -131,19 +132,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:8000/',
     'http://127.0.0.1:8000/issue/',
-    ' http://127.0.0.1:8000/api/create/'
+    ' http://127.0.0.1:8000/api/create/',
+    'http://127.0.0.1:8000/login/login/'
 ]
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 REST_FRAMEWORK = {
 
-    'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
-    ],
+    # 'DEFAULT_RENDERER_CLASSES': [
+    #     'rest_framework.renderers.JSONRenderer',
+    # ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication', 
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication'
+        # 'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication'
     ]
 }
