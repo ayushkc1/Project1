@@ -1,25 +1,33 @@
 from django.shortcuts import render
+from rest_framework.response import Response
 from django.http import HttpResponse,JsonResponse
 from snippet.models import Snippet
 from rest_framework.parsers import JSONParser           
 from snippet.serializers import SnippetSerializer   
+from rest_framework.decorators import api_view
+from rest_framework.views import APIView
+from rest_framework import status
+from django.http import Http404
+from rest_framework.exceptions import MethodNotAllowed
 
 # Create your views here.
-def snippet_list(request):
-    if request.method=='GET':
-        snippets=Snippet.objects.all()
-        serializer=SnippetSerializer(snippets,many=True)
-        return JsonResponse(serializer.data,safe=False)
-    
-    elif request.method=='POST':
-        data=JSONParser().parse(request)
-        serializer=SnippetSerializer(data=data)
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+def snippet_list(request, format=None):
+    if request.method == 'GET':
+        snippets = Snippet.objects.all()
+        serializer = SnippetSerializer(snippets, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = SnippetSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(serializer.data,status=201)
-        return JsonResponse(serializer.errors,status=400)
-    
-def snippet_detail(request,pk):
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'POST','PUT','DELETE'])   
+def snippet_detail(request,pk,format=None):
     try:
         snippet=Snippet.objects.get(pk=pk)
     except Snippet.DoesNotExist:
@@ -27,15 +35,15 @@ def snippet_detail(request,pk):
     
     if request.method=='GET':
         serializer=SnippetSerializer(snippet)
-        return JsonResponse(serializer.data)
+        return Response(serializer.data)
     
     elif request.method=='PUT':
         data=JSONParser().parse(request)
         serializer=SnippetSerializer(snippet,data=data)
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(serializer.data)
-        return JsonResponse(serializer.errors,status=400)
+            return Response(serializer.data)
+        return Response(serializer.errors,status=400)
     
     elif request.method=='DELETE':
         snippet.delete()

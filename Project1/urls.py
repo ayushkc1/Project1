@@ -6,5 +6,5 @@ urlpatterns = [
    #path("",include('libraryapp.urls')),
     path("api/",include('rest.urls')), 
     path("login/",include('loginapp.urls')),
-    path("test/",include("snippet.urls"))
+    path("",include("snippet.urls"))
 ]

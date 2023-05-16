@@ -2,9 +2,11 @@ from snippet.models import Snippet
 from rest_framework import serializers
 
 class SnippetSerializer(serializers.ModelSerializer):
+   
+    
     class Meta:
         model = Snippet
-        fields = ('id', 'title', 'code', 'linenos', 'language', 'style')
+        fields = '__all__'
         
     def create(self,validated_data):
         return Snippet.objects.create(**validated_data)
