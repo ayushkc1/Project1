@@ -20,9 +20,10 @@ from libraryapp import views
 from restpractise import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),   
-     
+    path('admin/', admin.site.urls),      
     path("",include('libraryapp.urls')),
     path("restp/",include('restpractise.urls')),
     path("users/",include('usermodels.urls')),
+    path("tut/",include('resttutorial.urls')),
 ]
+

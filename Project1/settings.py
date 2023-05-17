@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'restpractise',
     'usermodels',
     'rest_framework',
+    'resttutorial',
 ]
 
 AUTH_USER_MODEL = 'usermodels.User'
