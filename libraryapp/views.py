@@ -12,7 +12,20 @@ from .forms import RegistrationForm
 from datetime import date, timedelta
 import random
 from django.db import connection
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .serializers import UserSerializer
 
+class UserAPIView(APIView):
+    def get(self, request):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
+class UserAPIViewSingle(APIView):
+    def get(self, request,pk):
+        users = User.objects.get(pk=pk)
+        serializer = UserSerializer(users)
+        return Response(serializer.data)
 
 def home(request):
     return HttpResponse("Hello, world. You're at the polls index.")

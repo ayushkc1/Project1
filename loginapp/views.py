@@ -9,7 +9,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth import authenticate, login
 from .serializers import UserProfileSerializer
-
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.contrib.auth.models import User
+from .serializers import UserSerializer, UserProfileSerializer
+from .models import UserProfile
 class LoginView(APIView):
     def post(self, request):
         username = request.data.get('username')
@@ -23,3 +27,14 @@ class LoginView(APIView):
             return Response(serializer.data)
         else:
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+#
+class UserAPIView(APIView):
+    def get(self, request):
+        users = UserProfile.objects.all()
+        serializer = UserProfileSerializer(users, many=True)
+        return Response(serializer.data)
+class UserAPIViewSingle(APIView):
+    def get(self, request,pk):
+        users = UserProfile.objects.get(pk=pk)
+        serializer = UserProfileSerializer(users)
+        return Response(serializer.data)
