@@ -24,7 +24,7 @@ class SnippetSerializer(serializers.ModelSerializer):
         return instance
     
 class UserSerializer(serializers.ModelSerializer):
-    snippets=serializers.PrimaryKeyRelatedField(many=True,queryset=Snippet.objects.all())
+   # snippets=serializers.PrimaryKeyRelatedField(many=True,queryset=Snippet.objects.all())
     class Meta:
         model=User
-        fields=['id','username','snippets']
+        fields=['id','username']
