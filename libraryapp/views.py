@@ -106,7 +106,10 @@ def issue(request):
 def renew(request):
     borrowed_books = Borrow.objects.filter(user=request.user)
     with connections['default'].cursor() as cursor:
-        cursor.execute("SELECT * FROM libraryapp_borrow inner join libraryapp_book WHERE user_id = %s", [request.user.id])
+        cursor.execute(
+            "SELECT * FROM libraryapp_borrow AS b INNER JOIN libraryapp_book AS bo ON b.book_id=bo.book_id WHERE user_id = %s",
+            [request.user.id],
+        )
         rows = cursor.fetchall()
     borrowed_books=[]
     for row in rows:
