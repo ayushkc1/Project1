@@ -1,4 +1,7 @@
 from django.db import models
+from pygments.lexers import get_lexer_by_name
+from pygments.formatters.html import HtmlFormatter
+
 
 # Create your models here.
 class Snippet(models.Model):
@@ -10,9 +13,13 @@ class Snippet(models.Model):
     style=models.CharField(max_length=100)
     linenos=models.BooleanField(default=False)
     
+    
     class Meta:
         db_table="snippet"
         ordering=['created']
         
     def __str__(self):
         return str(self.title)
+    
+ 
+    

@@ -133,7 +133,8 @@ CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:8000/',
     'http://127.0.0.1:8000/issue/',
     ' http://127.0.0.1:8000/api/create/',
-    'http://127.0.0.1:8000/login/login/'
+    'http://127.0.0.1:8000/login/login/',
+    ' http://127.0.0.1:8000/api-auth/login/'
 ]
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
@@ -142,9 +143,10 @@ REST_FRAMEWORK = {
 
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
-                                 'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework.renderers.TemplateHTMLRenderer'
 
-                                 ],
+    ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
         # 'rest_framework.authentication.BasicAuthentication',
